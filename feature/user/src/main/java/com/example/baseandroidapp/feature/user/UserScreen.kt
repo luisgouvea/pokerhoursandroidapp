@@ -101,7 +101,7 @@ fun ListItem(
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            text = name + "_Test",
+            text = name,
             style = typography.bodyLarge,
             modifier = Modifier.weight(1f)
         )
