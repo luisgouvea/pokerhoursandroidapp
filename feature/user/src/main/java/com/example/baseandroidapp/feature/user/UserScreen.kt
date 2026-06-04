@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.baseandroidapp.core.designsystem.icon.BaaIcons
-import com.example.baseandroidapp.core.model.data.User
 
 @Composable
 fun UserRoute(
@@ -58,6 +57,9 @@ fun UserScreen(
                     CircularProgressIndicator()
                 }
 
+                is UserUiState.Error -> {
+                    Text("Error occurred")
+                }
                 is UserUiState.Success -> {
                     if (userUiState.users.isNotEmpty()) {
                         LazyColumn(
@@ -119,7 +121,7 @@ fun ListItem(
 @Preview(name = "UserScreenPopulated")
 @Composable
 fun UserScreenPreview() {
-    val userUiState: UserUiState = UserUiState.Success(mutableListOf(User(1, "First name")))
+    val userUiState: UserUiState = UserUiState.Success(mutableListOf(UserUI(1, "First name")))
     UserScreen(userUiState,{})
 }
 

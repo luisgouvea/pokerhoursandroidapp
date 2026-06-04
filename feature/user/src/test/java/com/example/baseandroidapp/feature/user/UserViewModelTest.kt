@@ -25,12 +25,14 @@ class UserViewModelTest {
     private var userUseCase = UserUseCase(
         userRepository = userRepository
     )
+    private var userUIMapper = UserUIMapper()
     private lateinit var viewModel: UserViewModel
 
     @Before
     fun setup() {
         viewModel = UserViewModel(
             userUseCase = userUseCase,
+            mapper = userUIMapper
         )
     }
 
@@ -49,7 +51,7 @@ class UserViewModelTest {
     fun mockUsersSuccess() = runTest {
             userUseCase = mockk()
             coEvery { userUseCase.getUser() } returns usersListFlow
-            viewModel = UserViewModel(userUseCase)
+            viewModel = UserViewModel(userUseCase, userUIMapper)
 
             val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiUserState.collect() }
 
