@@ -17,9 +17,11 @@ class UserRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : UserRepository {
 
-    override fun getUser(): Flow<List<User>> = flow {
+    override fun getUser(): Flow<Result<List<User>>> = flow {
         emit(
-            mapper.toDomain(userNetworkDataSourceImpl.fetchUser())
+            runCatching {
+                mapper.toDomain(userNetworkDataSourceImpl.fetchUser())
+            }
         )
     }.flowOn(ioDispatcher)
 }

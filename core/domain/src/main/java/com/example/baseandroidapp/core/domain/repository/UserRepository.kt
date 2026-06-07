@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getUser(
-    ): Flow<List<User>>
+    ): Flow<Result<List<User>>>
 }
