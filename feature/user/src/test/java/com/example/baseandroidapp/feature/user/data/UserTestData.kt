@@ -18,7 +18,7 @@ private val userListNetwork = listOf(
     UserResponse(id = 2, name = "Ervin Howell"),
     UserResponse(id = 3, name = "Clementine Bauch")
 )
-val usersListFlow: Flow<List<User>> = flowOf(userListDomain)
+val usersListFlow: Flow<Result<List<User>>> = flowOf(Result.success(userListDomain))
 val usersNetworkResponse: List<UserResponse> = userListNetwork
 val usersList = userListDomain
 

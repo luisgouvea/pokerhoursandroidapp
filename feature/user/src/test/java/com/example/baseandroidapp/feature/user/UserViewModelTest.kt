@@ -1,14 +1,13 @@
 package com.example.baseandroidapp.feature.user
 
 import com.example.baseandroidapp.core.domain.usecase.UserUseCase
-import com.example.baseandroidapp.feature.user.data.usersListFlow
+
 import com.example.baseandroidapp.feature.user.repository.TestUserRepository
 import com.example.baseandroidapp.feature.user.util.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.first
+
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -38,29 +37,29 @@ class UserViewModelTest {
 
     @Test
     fun just_request() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiUserState.collect() }
-
-        userRepository.getUser()
-        val result = viewModel.uiUserState.value
+        val result = viewModel.uiUserState.first { it is UserUiState.Success }
         assertIs<UserUiState.Success>(result)
-
-        collectJob.cancel()
     }
 
         @Test
     fun mockUsersSuccess() = runTest {
             userUseCase = mockk()
-            coEvery { userUseCase.getUser() } returns usersListFlow
+            val mockFlow = kotlinx.coroutines.flow.flowOf(
+                Result.success(
+                    listOf(
+                        com.example.baseandroidapp.core.model.data.User(1, "Leanne Graham"),
+                        com.example.baseandroidapp.core.model.data.User(2, "Ervin Howell"),
+                        com.example.baseandroidapp.core.model.data.User(3, "Clementine Bauch")
+                    )
+                )
+            )
+            coEvery { userUseCase.getUser() } returns mockFlow
             viewModel = UserViewModel(userUseCase, userUIMapper)
 
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiUserState.collect() }
-
-            val result = viewModel.uiUserState.value
+            val result = viewModel.uiUserState.first { it is UserUiState.Success }
 
             assertIs<UserUiState.Success>(result)
             assertEquals(3, result.users.size)
             assertEquals("Leanne Graham", result.users[0].name)
-
-            collectJob.cancel()
     }
 }
