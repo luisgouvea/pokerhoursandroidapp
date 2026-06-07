@@ -58,7 +58,7 @@ fun UserScreen(
                 }
 
                 is UserUiState.Error -> {
-                    Text("Error occurred")
+                    Text(text = userUiState.message)
                 }
                 is UserUiState.Success -> {
                     if (userUiState.users.isNotEmpty()) {
