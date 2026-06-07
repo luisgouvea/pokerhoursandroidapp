@@ -1,6 +1,6 @@
 package com.example.baseandroidapp.feature.user
 
-import com.example.baseandroidapp.core.domain.UserUseCase
+import com.example.baseandroidapp.core.domain.usecase.UserUseCase
 import com.example.baseandroidapp.feature.user.data.usersListFlow
 import com.example.baseandroidapp.feature.user.repository.TestUserRepository
 import com.example.baseandroidapp.feature.user.util.MainDispatcherRule

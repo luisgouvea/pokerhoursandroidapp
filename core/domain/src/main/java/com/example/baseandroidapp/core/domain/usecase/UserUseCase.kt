@@ -1,6 +1,6 @@
-package com.example.baseandroidapp.core.domain
+package com.example.baseandroidapp.core.domain.usecase
 
-import com.example.baseandroidapp.core.data.repository.UserRepository
+import com.example.baseandroidapp.core.domain.repository.UserRepository
 import com.example.baseandroidapp.core.model.data.User
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

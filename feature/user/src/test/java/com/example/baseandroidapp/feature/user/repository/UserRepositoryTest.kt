@@ -1,9 +1,9 @@
 package com.example.baseandroidapp.feature.user.repository
 
 import com.example.baseandroidapp.core.data.mapper.UserMapper
-import com.example.baseandroidapp.core.data.repository.UserRepository
+import com.example.baseandroidapp.core.domain.repository.UserRepository
 import com.example.baseandroidapp.core.data.repository.UserRepositoryImpl
-import com.example.baseandroidapp.core.network.BaaNetworkDataSource
+import com.example.baseandroidapp.core.network.UserNetworkDataSource
 import com.example.baseandroidapp.core.network.model.UserResponse
 import com.example.baseandroidapp.feature.user.data.firstUserFlow
 import com.example.baseandroidapp.feature.user.data.usersList
@@ -21,13 +21,14 @@ class UserRepositoryTest {
 
     private lateinit var repository: UserRepository
     private val mockMapper: UserMapper = mockk<UserMapper>()
-    private val mockDataSource: BaaNetworkDataSource = mockk<BaaNetworkDataSource>()
+    private val mockDataSource: UserNetworkDataSource = mockk<UserNetworkDataSource>()
 
     @Before
     fun setup() {
         repository = UserRepositoryImpl(
             mapper = mockMapper,
-            baaNetworkDataSourceImpl = mockDataSource
+            userNetworkDataSourceImpl = mockDataSource,
+            ioDispatcher = kotlinx.coroutines.Dispatchers.IO
         )
     }
 

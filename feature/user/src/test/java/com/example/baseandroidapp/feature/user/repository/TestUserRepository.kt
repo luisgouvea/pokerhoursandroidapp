@@ -1,6 +1,6 @@
 package com.example.baseandroidapp.feature.user.repository
 
-import com.example.baseandroidapp.core.data.repository.UserRepository
+import com.example.baseandroidapp.core.domain.repository.UserRepository
 import com.example.baseandroidapp.core.model.data.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

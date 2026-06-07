@@ -1,6 +1,6 @@
 package com.example.baseandroidapp.core.data.di
 
-import com.example.baseandroidapp.core.data.repository.UserRepository
+import com.example.baseandroidapp.core.domain.repository.UserRepository
 import com.example.baseandroidapp.core.data.repository.UserRepositoryImpl
 import com.example.baseandroidapp.core.data.util.ConnectivityManagerNetworkMonitor
 import com.example.baseandroidapp.core.data.util.NetworkMonitor

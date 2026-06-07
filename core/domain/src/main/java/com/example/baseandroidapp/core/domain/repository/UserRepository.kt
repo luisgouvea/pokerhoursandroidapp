@@ -1,4 +1,4 @@
-package com.example.baseandroidapp.core.data.repository
+package com.example.baseandroidapp.core.domain.repository
 
 import com.example.baseandroidapp.core.model.data.User
 import kotlinx.coroutines.flow.Flow
