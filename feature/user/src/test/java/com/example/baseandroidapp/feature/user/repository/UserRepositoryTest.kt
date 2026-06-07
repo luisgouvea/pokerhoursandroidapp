@@ -5,7 +5,6 @@ import com.example.baseandroidapp.core.domain.repository.UserRepository
 import com.example.baseandroidapp.core.data.repository.UserRepositoryImpl
 import com.example.baseandroidapp.core.network.UserNetworkDataSource
 import com.example.baseandroidapp.core.network.model.UserResponse
-import com.example.baseandroidapp.feature.user.data.firstUserFlow
 import com.example.baseandroidapp.feature.user.data.usersList
 import com.example.baseandroidapp.feature.user.data.usersNetworkResponse
 import io.mockk.coEvery
@@ -41,6 +40,6 @@ class UserRepositoryTest {
         val result = repository.getUser().first()
 
         // Assert
-        assertEquals(firstUserFlow, result)
+        assertEquals(Result.success(usersList), result)
     }
 }

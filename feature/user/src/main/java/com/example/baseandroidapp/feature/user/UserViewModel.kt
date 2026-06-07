@@ -2,6 +2,7 @@ package com.example.baseandroidapp.feature.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baseandroidapp.core.domain.usecase.UserResult
 import com.example.baseandroidapp.core.domain.usecase.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,10 +20,10 @@ class UserViewModel @Inject constructor(
 val uiUserState: StateFlow<UserUiState> =
     userUseCase.getUser()
         .map { result ->
-            result.fold(
-                onSuccess = { UserUiState.Success(mapper.toUserUI(it)) },
-                onFailure = { UserUiState.Error(it.message ?: "Error occurred") }
-            )
+            when (result) {
+                is UserResult.Success -> UserUiState.Success(mapper.toUserUI(result.users))
+                is UserResult.Failure -> UserUiState.Error(result.error.message)
+            }
         }
         .stateIn(
             scope = viewModelScope,

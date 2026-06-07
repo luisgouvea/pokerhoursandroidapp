@@ -1,13 +1,14 @@
 package com.example.baseandroidapp.feature.user
 
+import com.example.baseandroidapp.core.domain.usecase.UserResult
 import com.example.baseandroidapp.core.domain.usecase.UserUseCase
-
+import com.example.baseandroidapp.core.model.data.User
 import com.example.baseandroidapp.feature.user.repository.TestUserRepository
 import com.example.baseandroidapp.feature.user.util.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
-
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -41,25 +42,25 @@ class UserViewModelTest {
         assertIs<UserUiState.Success>(result)
     }
 
-        @Test
+    @Test
     fun mockUsersSuccess() = runTest {
-            userUseCase = mockk()
-            val mockFlow = kotlinx.coroutines.flow.flowOf(
-                Result.success(
-                    listOf(
-                        com.example.baseandroidapp.core.model.data.User(1, "Leanne Graham"),
-                        com.example.baseandroidapp.core.model.data.User(2, "Ervin Howell"),
-                        com.example.baseandroidapp.core.model.data.User(3, "Clementine Bauch")
-                    )
+        userUseCase = mockk()
+        val mockFlow = flowOf(
+            UserResult.Success(
+                listOf(
+                    User(1, "Leanne Graham"),
+                    User(2, "Ervin Howell"),
+                    User(3, "Clementine Bauch")
                 )
             )
-            coEvery { userUseCase.getUser() } returns mockFlow
-            viewModel = UserViewModel(userUseCase, userUIMapper)
+        )
+        coEvery { userUseCase.getUser() } returns mockFlow
+        viewModel = UserViewModel(userUseCase, userUIMapper)
 
-            val result = viewModel.uiUserState.first { it is UserUiState.Success }
+        val result = viewModel.uiUserState.first { it is UserUiState.Success }
 
-            assertIs<UserUiState.Success>(result)
-            assertEquals(3, result.users.size)
-            assertEquals("Leanne Graham", result.users[0].name)
+        assertIs<UserUiState.Success>(result)
+        assertEquals(3, result.users.size)
+        assertEquals("Leanne Graham", result.users[0].name)
     }
 }
