@@ -21,6 +21,7 @@ val uiUserState: StateFlow<UserUiState> =
     userUseCase.getUser()
         .map { result ->
             when (result) {
+                is UserResult.EmptyList -> UserUiState.EmptyList
                 is UserResult.Success -> UserUiState.Success(mapper.toUserUI(result.users))
                 is UserResult.Failure -> UserUiState.Error(result.error.message)
             }
@@ -34,6 +35,7 @@ val uiUserState: StateFlow<UserUiState> =
 
 sealed interface UserUiState {
     object Loading : UserUiState
+    object EmptyList : UserUiState
     data class Success(val users: List<UserUI>) : UserUiState
     data class Error(val message: String) : UserUiState
 }

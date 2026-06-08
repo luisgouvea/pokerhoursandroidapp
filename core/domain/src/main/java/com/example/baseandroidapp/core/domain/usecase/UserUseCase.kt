@@ -15,12 +15,11 @@ class UserUseCase @Inject constructor(
             .map { result ->
                 result.fold(
                     onSuccess = { users ->
-                        if (users.isEmpty()) UserResult.Failure(UserError.EmptyList)
+                        if (users.isEmpty()) UserResult.EmptyList
                         else UserResult.Success(users)
                     },
                     onFailure = { exception ->
                         val domainError = when (exception) {
-                            is UserError -> exception
                             is IOException -> UserError.NetworkUnavailable
                             else -> UserError.Unknown(exception.message ?: "Erro desconhecido")
                         }
@@ -29,13 +28,14 @@ class UserUseCase @Inject constructor(
                 )
             }
 }
+
 sealed class UserResult {
     data class Success(val users: List<User>) : UserResult()
     data class Failure(val error: UserError) : UserResult()
+    object EmptyList : UserResult()
 }
 
 sealed class UserError(override val message: String) : Exception(message) {
-    object EmptyList : UserError("Nenhum usuário encontrado")
     object NetworkUnavailable : UserError("Sem conexão com a internet")
     data class Unknown(val errorMessage: String) : UserError(errorMessage)
 }

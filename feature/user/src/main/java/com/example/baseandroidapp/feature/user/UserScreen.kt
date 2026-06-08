@@ -57,6 +57,9 @@ fun UserScreen(
                     CircularProgressIndicator()
                 }
 
+                is UserUiState.EmptyList -> {
+                    Text(text = "No users found")
+                }
                 is UserUiState.Error -> {
                     Text(text = userUiState.message)
                 }
