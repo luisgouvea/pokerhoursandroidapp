@@ -21,7 +21,7 @@ class UserUseCase @Inject constructor(
                     onFailure = { exception ->
                         val domainError = when (exception) {
                             is IOException -> UserError.NetworkUnavailable
-                            else -> UserError.Unknown(exception.message ?: "Erro desconhecido")
+                            else -> UserError.Unknown
                         }
                         UserResult.Failure(domainError)
                     }
@@ -35,7 +35,7 @@ sealed class UserResult {
     object EmptyList : UserResult()
 }
 
-sealed class UserError(override val message: String) : Exception(message) {
-    object NetworkUnavailable : UserError("Sem conexão com a internet")
-    data class Unknown(val errorMessage: String) : UserError(errorMessage)
+sealed class UserError() {
+    object NetworkUnavailable : UserError()
+    object Unknown : UserError()
 }

@@ -2,6 +2,7 @@ package com.example.baseandroidapp.feature.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.baseandroidapp.core.domain.usecase.UserError
 import com.example.baseandroidapp.core.domain.usecase.UserResult
 import com.example.baseandroidapp.core.domain.usecase.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,7 @@ val uiUserState: StateFlow<UserUiState> =
             when (result) {
                 is UserResult.EmptyList -> UserUiState.EmptyList
                 is UserResult.Success -> UserUiState.Success(mapper.toUserUI(result.users))
-                is UserResult.Failure -> UserUiState.Error(result.error.message)
+                is UserResult.Failure -> UserUiState.Error(result.error)
             }
         }
         .stateIn(
@@ -37,5 +38,5 @@ sealed interface UserUiState {
     object Loading : UserUiState
     object EmptyList : UserUiState
     data class Success(val users: List<UserUI>) : UserUiState
-    data class Error(val message: String) : UserUiState
+    data class Error(val userError: UserError) : UserUiState
 }

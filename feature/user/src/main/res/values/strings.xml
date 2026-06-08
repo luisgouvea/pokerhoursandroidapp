@@ -1,3 +1,5 @@
 <resources>
     <string name="feature_user_title">Users</string>
+    <string name="feature_user_error">Error</string>
+    <string name="feature_user_generic_error">Error loading users</string>
 </resources>

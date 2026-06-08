@@ -24,11 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.baseandroidapp.core.designsystem.icon.BaaIcons
+import com.example.baseandroidapp.core.domain.usecase.UserError
+import com.example.baseandroidapp.user.R
 
 @Composable
 fun UserRoute(
@@ -61,7 +64,11 @@ fun UserScreen(
                     Text(text = "No users found")
                 }
                 is UserUiState.Error -> {
-                    Text(text = userUiState.message)
+                    val message = when (userUiState.userError) {
+                        is UserError.NetworkUnavailable -> stringResource(R.string.feature_user_error)
+                        else -> stringResource(R.string.feature_user_generic_error)
+                    }
+                    Text(text = message)
                 }
                 is UserUiState.Success -> {
                     if (userUiState.users.isNotEmpty()) {
