@@ -50,25 +50,6 @@ UI (Compose) → ViewModel → UseCase → Repository interface (core:domain)
 
 AGP 8.1.1 · Kotlin 2.0.0 · Gradle 8.5 · Java 17 · minSdk 26 · compileSdk 34 · Compose BOM 2025.01.01 · Hilt 2.47 · Retrofit 2.9.0 · Moshi 1.12.0
 
-## Worktrees
-
-This project runs inside a Docker container where the repo is mounted at `/workspace`. The host macOS path is `/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp`.
-
-When creating a git worktree, git records the container path (`/workspace/...`) in the gitdir files, breaking the link on the host. **Always fix both sides after creating a worktree:**
-
-```bash
-# 1. Create the worktree
-git worktree add worktrees/<name> -b <branch-name>
-
-# 2. Fix .git inside the worktree (container path → host path)
-echo "gitdir: /Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp/.git/worktrees/<name>" > worktrees/<name>/.git
-
-# 3. Fix gitdir inside main .git (host path → worktree)
-echo "/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp/worktrees/<name>/.git" > .git/worktrees/<name>/gitdir
-```
-
-Verify with `git worktree list` — the worktree must show the full macOS host path, not `/workspace/...`.
-
 ## Conventions
 
 - Base package: `com.example.baseandroidapp`

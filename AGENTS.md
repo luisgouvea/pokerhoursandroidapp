@@ -54,6 +54,8 @@ AGP 8.1.1 · Kotlin 2.0.0 · Gradle 8.5 · Java 17 · minSdk 26 · compileSdk 34
 
 This project runs inside a Docker container where the repo is mounted at `/workspace`. The host macOS path is `/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp`.
 
+**Before creating a worktree, both the worktree name and the branch name must be explicitly provided by the user. If either is missing, do not proceed — ask the user for the missing information first.**
+
 When creating a git worktree, git records the container path (`/workspace/...`) in the gitdir files, breaking the link on the host. **Always fix both sides after creating a worktree:**
 
 ```bash
@@ -65,9 +67,12 @@ echo "gitdir: /Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhour
 
 # 3. Fix gitdir inside main .git (host path → worktree)
 echo "/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp/worktrees/<name>/.git" > .git/worktrees/<name>/gitdir
+
 ```
 
 Verify with `git worktree list` — the worktree must show the full macOS host path, not `/workspace/...`.
+
+**After creating the worktree, all file modifications must be made inside `worktrees/<name>/` and all git commands must use `git -C worktrees/<name>`. Never modify files in the root project or run plain `git` commands targeting the root after this point — the work belongs to the worktree branch.**
 
 ## Conventions
 
