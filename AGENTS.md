@@ -88,6 +88,23 @@ git worktree list                  # worktree must show the macOS host path, not
 git -C worktrees/<name> status     # must report the branch cleanly, with no path errors
 ```
 
+### Procedure — Removing a worktree
+
+`git worktree remove` may clear the git registration but leave the `worktrees/<name>/` directory behind (because of the container/host path mismatch). To remove a worktree cleanly:
+
+```bash
+# 1. Remove the worktree (use --force if it has uncommitted changes you want to discard)
+git worktree remove worktrees/<name>
+
+# 2. Delete the directory if it was left behind
+rm -rf worktrees/<name>
+
+# 3. Prune any stale registration left in git
+git worktree prune
+```
+
+Then confirm with `git worktree list` — the removed worktree must no longer appear.
+
 ## Conventions
 
 - Base package: `com.example.baseandroidapp`
