@@ -52,14 +52,26 @@ AGP 8.1.1 · Kotlin 2.0.0 · Gradle 8.5 · Java 17 · minSdk 26 · compileSdk 34
 
 ## Worktrees
 
-This project runs inside a Docker container where the repo is mounted at `/workspace`. The host macOS path is `/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp`.
+This project runs inside a Docker container where the repo is mounted at `/workspace`, but the host is macOS at `/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp`. Git records the container path in worktree metadata, which breaks the link on the host — so worktrees need a path fix after creation (see Procedure below).
 
-**Before creating a worktree, both the worktree name and the branch name must be explicitly provided by the user. If either is missing, do not proceed — ask the user for the missing information first.**
+### Rule 1 — Scope of the session
 
-When creating a git worktree, git records the container path (`/workspace/...`) in the gitdir files, breaking the link on the host. **Always fix both sides after creating a worktree:**
+Whenever the user mentions a worktree — to create a new one OR to work in an existing one — that worktree becomes the target for the **entire rest of the session**. From that point on:
+
+- Edit files only inside `worktrees/<name>/`.
+- Run every git command as `git -C worktrees/<name> <...>`.
+- Never edit files in the root project or run plain `git` commands against the root.
+
+A worktree is already checked out on its branch, so working inside its directory automatically commits to the correct branch — never run `git checkout`.
+
+### Rule 2 — Required input before creating
+
+To create a worktree you need both the **worktree name** and the **branch name** from the user. If either is missing, stop and ask — do not invent names or proceed.
+
+### Procedure — Creating a worktree
 
 ```bash
-# 1. Create the worktree
+# 1. Create the worktree on a new branch
 git worktree add worktrees/<name> -b <branch-name>
 
 # 2. Fix .git inside the worktree (container path → host path)
@@ -67,12 +79,14 @@ echo "gitdir: /Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhour
 
 # 3. Fix gitdir inside main .git (host path → worktree)
 echo "/Users/luiseduardo/Projetos/Android/pokerhoursandroidapp/pokerhoursandroidapp/worktrees/<name>/.git" > .git/worktrees/<name>/gitdir
-
 ```
 
-Verify with `git worktree list` — the worktree must show the full macOS host path, not `/workspace/...`.
+Then verify both the path fix and that the worktree is usable:
 
-**After creating the worktree, all file modifications must be made inside `worktrees/<name>/` and all git commands must use `git -C worktrees/<name>`. Never modify files in the root project or run plain `git` commands targeting the root after this point — the work belongs to the worktree branch.**
+```bash
+git worktree list                  # worktree must show the macOS host path, not /workspace/...
+git -C worktrees/<name> status     # must report the branch cleanly, with no path errors
+```
 
 ## Conventions
 
